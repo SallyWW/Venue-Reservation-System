@@ -8,7 +8,7 @@ namespace ProjectOrganizer.DAL
     public class DepartmentSqlDAO : IDepartmentDAO
     {
         private readonly string connectionString;
-        private const string SqlInsertDepartment = "INSERT INTO department (department_id, name) VALUES (@department_id, @name);";
+        private const string SqlInsertDepartment = "INSERT INTO department (name) VALUES (@name); SELECT @@IDENTITY;";
         private const string SqlSelectAllDepartments = "SELECT department_id, name FROM department";
 
         // Single Parameter Constructor
@@ -62,7 +62,7 @@ namespace ProjectOrganizer.DAL
                     conn.Open();
 
                     SqlCommand command = new SqlCommand(SqlInsertDepartment, conn);
-                    command.Parameters.AddWithValue("@department_id", newDepartment.Id);
+                    //command.Parameters.AddWithValue("@department_id", newDepartment.Id);
                     command.Parameters.AddWithValue("@name", newDepartment.Name);
 
                     //command.ExecuteNonQuery();
@@ -71,7 +71,7 @@ namespace ProjectOrganizer.DAL
                    // Console.WriteLine("Just created department " + id);
                 }
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("problems creating Department " + ex.Message);
                 return 0;
