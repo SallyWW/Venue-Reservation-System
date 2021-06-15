@@ -63,16 +63,13 @@ namespace ProjectOrganizer.DAL
                     conn.Open();
 
                     SqlCommand command = new SqlCommand(SqlInsertDepartment, conn);
-                    //command.Parameters.AddWithValue("@department_id", newDepartment.Id);
                     command.Parameters.AddWithValue("@name", newDepartment.Name);
 
-                    //command.ExecuteNonQuery();
                     int id = Convert.ToInt32(command.ExecuteScalar());
                     return id;
-                   // Console.WriteLine("Just created department " + id);
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
                 Console.WriteLine("problems creating Department " + ex.Message);
                 return 0;
@@ -99,7 +96,7 @@ namespace ProjectOrganizer.DAL
                     command.ExecuteNonQuery();
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
                 Console.WriteLine("An error occurred updating the department. " + ex.Message);
                 return false;
