@@ -109,5 +109,10 @@ INSERT INTO project_employee (project_id, employee_id) VALUES (6, 11);
 
 COMMIT TRANSACTION;
 
-
-SELECT department_id, name FROM department
+SELECT
+	e.first_name,
+	e.last_name,
+	p.project_id
+FROM employee e
+	JOIN project_employee pe ON e.employee_id = pe.employee_id
+	JOIN project p ON pe.project_id = p.project_id
