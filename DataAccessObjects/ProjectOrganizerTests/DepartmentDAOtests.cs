@@ -24,6 +24,8 @@ namespace ProjectOrganizerTests
             Assert.IsTrue(results.Count > 0);
             Assert.AreEqual(expectedResults, results.Count);
         }
+
+        [TestMethod]
         public void CreateDepartmentsShouldIncreaseCountBy1()
         {
             //Arrange
@@ -41,5 +43,20 @@ namespace ProjectOrganizerTests
             Assert.AreEqual(oldRowCount + 1, GetRowCount("department"));
         }
 
+        [TestMethod]
+        public void UpdateDepartmentShouldChangeNameOfDepartment()
+        {
+            //Arrange
+            DepartmentSqlDAO dao = new DepartmentSqlDAO(ConnectionString);
+            Department expectedDepartment = new Department();
+            expectedDepartment.Name = "project x";
+            expectedDepartment.Id = 1;
+
+            //Act
+            bool success = dao.UpdateDepartment(expectedDepartment);
+
+            //Assert
+            Assert.IsTrue(success);
+        }
     }
 }
