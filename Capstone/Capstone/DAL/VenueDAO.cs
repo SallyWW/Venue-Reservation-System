@@ -21,7 +21,7 @@ namespace Capstone.DAL
 
         public IList<Venue> GetAllVenues()
         {
-            List<Venue> venues = new List<Venue>();
+            IList<Venue> venues = new List<Venue>();
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))

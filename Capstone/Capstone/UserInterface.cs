@@ -32,7 +32,7 @@ namespace Capstone
             venueDAO = new VenueDAO(connectionString);
         }
 
-        //private VenueDAO venuedao = new VenueDAO();
+        //private VenueDAO venuedao = new VenueDAO(connectionString);
 
         private List<int> menuWalkBack = new List<int>();
         public void Run()
@@ -66,10 +66,14 @@ namespace Capstone
         }
         public void ListVenues()
         {
+            //VenueDAO.GetAllVenues()
+            //private VenueDAO venuedao = new VenueDAO(connectionString);
+            //IList<Venue> venueList;
+            
+            //ListOutTheVenues(venueList);
+            
 
-            //IList<Venue> venueList = VenueDAO.GetAllVenues();
-
-            menuWalkBack.Add(2);
+                menuWalkBack.Add(2);
             // dao.DisplayAllVenues();
 
 
