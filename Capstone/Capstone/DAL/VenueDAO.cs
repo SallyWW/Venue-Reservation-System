@@ -15,9 +15,10 @@ namespace Capstone.DAL
         private const string SqlSelectAllVenues = "SELECT v.id, v.name, c.name, s.name, s.abbreviation, v.description " +
             "FROM venue v JOIN city c ON v.city_id = c.id JOIN state s ON c.state_abbreviation = s.abbreviation " +
             "ORDER BY v.name";
-        private const string SqlSelectGetCategories = "SELECT v.id, v.name, c.name FROM venue v " +
+        private const string SqlSelectGetCategories = "SELECT c.name FROM venue v " +
                     "JOIN category_venue cv ON v.id = cv.venue_id " +
                     "JOIN category c ON c.id = cv.category_id" +
+                    "WHERE v.id = @venueid" +
                     "ORDER BY v.name";
 
 
@@ -72,20 +73,21 @@ namespace Capstone.DAL
 
                     SqlCommand command = new SqlCommand(SqlSelectGetCategories, conn);
 
+                    command.Parameters.AddWithValue("@venueid", venue.Id);
+
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        string category = "";
-                        string lineID = reader["id"].ToString();
-                        if (currentID != lineID)
-                        {
-                            continue;
-                        }
-                        else if (currentID == lineID)
-                        {
-                            category = reader["name"].ToString();
-                            categories.Add(category);
-                        }
+                        //string category = "";
+                        //string lineID = reader["id"].ToString();
+                        //if (currentID != lineID)
+                        //{
+                        //    continue;
+                        //}
+                        //else if (currentID == lineID)
+                        //{
+                        //    category = reader["name"].ToString();
+                        categories.Add(reader.GetString(0));
                     }
                 }
             }
@@ -93,10 +95,7 @@ namespace Capstone.DAL
             {
                 Console.WriteLine("Problem getting venues: " + ex.Message);
             }
-
-
             return categories;
-
         }
     }
 }
