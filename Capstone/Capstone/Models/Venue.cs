@@ -10,8 +10,8 @@ namespace Capstone.Models
         public string   Name            { get; set; }
         public int      CityId          { get; set; }
         public string   Description     { get; set; }
-
-        
+        public string   StateName       { get; set; }
+        public string   CityName        { get; set; }
+        public string   StateCode       { get; set; }
     }
-
 }

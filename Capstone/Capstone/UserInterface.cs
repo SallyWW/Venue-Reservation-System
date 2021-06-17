@@ -49,7 +49,7 @@ namespace Capstone
                 string userInput = Console.ReadLine().ToString();
                 if (userInput == "1")
                 {
-                    //method();
+                    ListVenues();
                 }
                 if (userInput == "2")
                 {
@@ -66,18 +66,16 @@ namespace Capstone
         }
         public void ListVenues()
         {
-            //VenueDAO.GetAllVenues()
-            //private VenueDAO venuedao = new VenueDAO(connectionString);
-            //IList<Venue> venueList;
-            
-            //ListOutTheVenues(venueList);
-            
+            menuWalkBack.Add(2);
 
-                menuWalkBack.Add(2);
-            // dao.DisplayAllVenues();
-
-
-            //$"Venue is called {venue.Name} and its description is {venue.Description} and..."
+            IList<Venue> venues = venueDAO.GetAllVenues();
+            Console.WriteLine("Which venue would you like to view?");
+            for (int i = 0; i < venues.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}) {venues[i].Name}");
+            }
+            Console.WriteLine($"R) Return to Previous Screen");
+            Console.ReadLine();
         }
 
 
