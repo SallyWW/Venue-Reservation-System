@@ -13,5 +13,7 @@ namespace Capstone.Models
         public string   StateName       { get; set; }
         public string   CityName        { get; set; }
         public string   StateCode       { get; set; }
+
+        public List<string> Categories  { get; set; }
     }
 }

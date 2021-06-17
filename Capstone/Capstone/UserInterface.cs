@@ -78,6 +78,7 @@ namespace Capstone
             Console.ReadLine();
         }
 
+                //venueDAO.GetCategoriesForVenues(venues[i]);
 
 
 
