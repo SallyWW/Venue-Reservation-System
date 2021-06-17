@@ -17,8 +17,8 @@ namespace Capstone.DAL
             "ORDER BY v.name";
         private const string SqlSelectGetCategories = "SELECT c.name FROM venue v " +
                     "JOIN category_venue cv ON v.id = cv.venue_id " +
-                    "JOIN category c ON c.id = cv.category_id" +
-                    "WHERE v.id = @venueid" +
+                    "JOIN category c ON c.id = cv.category_id " +
+                    "WHERE v.id = @venueid " +
                     "ORDER BY v.name";
 
 
