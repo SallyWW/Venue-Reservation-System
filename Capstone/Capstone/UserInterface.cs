@@ -51,7 +51,7 @@ namespace Capstone
                 {
                     ListVenues();
                 }
-                if (userInput == "2")
+                else if (userInput == "2")
                 {
                     mainMenu = false;
                 }
@@ -67,25 +67,74 @@ namespace Capstone
         public void ListVenues()
         {
             menuWalkBack.Add(2);
-
-            IList<Venue> venues = venueDAO.GetAllVenues();
-            Console.WriteLine("Which venue would you like to view?");
-            for (int i = 0; i < venues.Count; i++)
+            bool listVenues = true;
+            while (listVenues)
             {
-                Console.WriteLine($"{i + 1}) {venues[i].Name}");
+
+                IList<Venue> venues = venueDAO.GetAllVenues();
+                Console.WriteLine("Which venue would you like to view?");
+                Venue userVenue;
+                for (int i = 0; i < venues.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}) {venues[i].Name}");
+                }
+                Console.WriteLine($"R) Return to Previous Screen");
+                string userInput = Console.ReadLine().ToUpper();
+                if (userInput == "R")
+                {
+                    listVenues = false;
+                    ReturnToPrevious();
+                }
+                int userInt = Convert.ToInt32(userInput);
+                if ((userInt > 0) && (userInt < 16))
+                {
+                    userVenue = venues[userInt - 1];
+
+                    DisplayTheVenueDetails(userVenue);
+                }
             }
-            Console.WriteLine($"R) Return to Previous Screen");
-            Console.ReadLine();
+        }
+        public void DisplayTheVenueDetails(Venue venue)
+        {
+            IList<string> categoryList = venueDAO.GetCategoriesForVenues(venue);
+            Console.WriteLine(venue.Name);
+            Console.WriteLine($"Location: {venue.CityName}, {venue.StateCode}");
+            string catList = "";
+            foreach (string category in categoryList)
+            {
+                if (categoryList.Count != 0)
+                {
+                    catList += ", ";
+                }
+                catList += category;
+            }
+            Console.WriteLine($"Categories: {catList}");
+            Console.WriteLine();
         }
 
-                //venueDAO.GetCategoriesForVenues(venues[i]);
+        //venueDAO.GetCategoriesForVenues(venues[i]);
+
+        //public void CategoriesToWriteLine(Venue venue)
+        //{
+        //    IList<string> categiories = venueDAO.GetCategoriesForVenues(venue);
+        //}
 
 
 
 
-
-
-
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         public void ReturnToPrevious()
         {
             // remove last entry in list
@@ -110,18 +159,18 @@ namespace Capstone
                 case 1:
                     Run();
                     break;
-                    //case 2:
-                    //    UserSelectVenue();
-                    //    break;
-                    //case 3:
-                    //    ThirdMenu();
-                    //    break;
-                    ////case 4:
-                    ////    FourthMenu();
-                    ////    break;
-                    //default:
-                    //    MainMenu();
-                    //    break;
+                case 2:
+                    ListVenues();
+                    break;
+                //case 3:
+                //    ThirdMenu();
+                //    break;
+                ////case 4:
+                ////    FourthMenu();
+                ////    break;
+                default:
+                    Run();
+                    break;
 
             }
         }

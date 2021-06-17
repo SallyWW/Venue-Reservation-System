@@ -97,5 +97,38 @@ namespace Capstone.DAL
             }
             return categories;
         }
+        //public IList<Venue> GetVenueDetails()
+        //{
+        //    IList<Venue> venues = new List<Venue>();
+        //    try
+        //    {
+        //        using (SqlConnection conn = new SqlConnection(connectionString))
+        //        {
+        //            conn.Open();
+
+        //            SqlCommand command = new SqlCommand(SqlSelectAllVenues, conn);
+
+        //            SqlDataReader reader = command.ExecuteReader();
+        //            while (reader.Read())
+        //            {
+        //                Venue venue = new Venue();
+        //                venue.Id = Convert.ToInt32(reader["id"]);
+        //                venue.Name = Convert.ToString(reader["name"]);
+        //                venue.Description = Convert.ToString(reader["description"]);
+        //                venue.StateName = Convert.ToString(reader["stateName"]);
+        //                venue.CityName = Convert.ToString(reader["cityName"]);
+        //                venue.StateCode = Convert.ToString(reader["abbreviation"]);
+        //                venues.Add(venue);
+        //            }
+        //        }
+        //    }
+        //    catch (SqlException ex)
+        //    {
+        //        Console.WriteLine("Problem getting venues: " + ex.Message);
+        //    }
+
+
+        //    return venues;
+        //}
     }
 }

@@ -15,5 +15,6 @@ namespace Capstone.Models
         public string   StateCode       { get; set; }
 
         public List<string> Categories  { get; set; }
+
     }
 }
