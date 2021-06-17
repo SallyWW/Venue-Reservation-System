@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Data.SqlClient;
 using System.IO;
 using System.Transactions;
@@ -10,7 +11,7 @@ namespace ProjectOrganizerTests
     {
         private TransactionScope transaction;
 
-        protected string ConnectionString { get; } = "Server=.\\SQLEXPRESS;Database=Projects;Trusted_Connection=True;";
+        protected string ConnectionString { get; } = "Server=.\\SQLEXPRESS;Database=EmployeeDB;Trusted_Connection=True;";
 
 
         [TestInitialize]
@@ -34,6 +35,17 @@ namespace ProjectOrganizerTests
         public void Cleanup()
         {
             transaction.Dispose(); // ROLLBACK TRANSACTION
+        }
+        
+        protected int GetRowCount(string table)
+        {
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand($"SELECT COUNT(*) FROM {table}", conn);
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count;
+            }
         }
     }
 }
