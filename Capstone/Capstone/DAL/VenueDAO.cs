@@ -17,8 +17,8 @@ namespace Capstone.DAL
             "ORDER BY v.name";
         private const string SqlSelectGetCategories = "SELECT c.name FROM venue v " +
                     "JOIN category_venue cv ON v.id = cv.venue_id " +
-                    "JOIN category c ON c.id = cv.category_id" +
-                    "WHERE v.id = @venueid" +
+                    "JOIN category c ON c.id = cv.category_id " +
+                    "WHERE v.id = @venueid " +
                     "ORDER BY v.name";
 
 
@@ -78,15 +78,6 @@ namespace Capstone.DAL
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        //string category = "";
-                        //string lineID = reader["id"].ToString();
-                        //if (currentID != lineID)
-                        //{
-                        //    continue;
-                        //}
-                        //else if (currentID == lineID)
-                        //{
-                        //    category = reader["name"].ToString();
                         categories.Add(reader.GetString(0));
                     }
                 }
@@ -97,38 +88,5 @@ namespace Capstone.DAL
             }
             return categories;
         }
-        //public IList<Venue> GetVenueDetails()
-        //{
-        //    IList<Venue> venues = new List<Venue>();
-        //    try
-        //    {
-        //        using (SqlConnection conn = new SqlConnection(connectionString))
-        //        {
-        //            conn.Open();
-
-        //            SqlCommand command = new SqlCommand(SqlSelectAllVenues, conn);
-
-        //            SqlDataReader reader = command.ExecuteReader();
-        //            while (reader.Read())
-        //            {
-        //                Venue venue = new Venue();
-        //                venue.Id = Convert.ToInt32(reader["id"]);
-        //                venue.Name = Convert.ToString(reader["name"]);
-        //                venue.Description = Convert.ToString(reader["description"]);
-        //                venue.StateName = Convert.ToString(reader["stateName"]);
-        //                venue.CityName = Convert.ToString(reader["cityName"]);
-        //                venue.StateCode = Convert.ToString(reader["abbreviation"]);
-        //                venues.Add(venue);
-        //            }
-        //        }
-        //    }
-        //    catch (SqlException ex)
-        //    {
-        //        Console.WriteLine("Problem getting venues: " + ex.Message);
-        //    }
-
-
-        //    return venues;
-        //}
     }
 }

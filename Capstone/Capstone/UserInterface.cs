@@ -44,8 +44,8 @@ namespace Capstone
             {
 
                 Console.WriteLine("What would you like to do?");
-                Console.WriteLine("1. List Venues");
-                Console.WriteLine("2. Quit");
+                Console.WriteLine("1) List Venues");
+                Console.WriteLine("2) Quit");
                 string userInput = Console.ReadLine().ToString();
                 if (userInput == "1")
                 {
@@ -91,6 +91,7 @@ namespace Capstone
                     userVenue = venues[userInt - 1];
 
                     DisplayTheVenueDetails(userVenue);
+                    Console.ReadLine();
                 }
             }
         }
@@ -99,10 +100,17 @@ namespace Capstone
             IList<string> categoryList = venueDAO.GetCategoriesForVenues(venue);
             Console.WriteLine(venue.Name);
             Console.WriteLine($"Location: {venue.CityName}, {venue.StateCode}");
+
+            // ["hello", "there"] WANT "hello, there"
+            // init some var str as ""
+            // for each category
+            //   if str is not empty ("hello") add comma
+            //   str = str + category
+            // done
             string catList = "";
             foreach (string category in categoryList)
             {
-                if (categoryList.Count != 0)
+                if (catList.Length != 0)
                 {
                     catList += ", ";
                 }
@@ -110,6 +118,13 @@ namespace Capstone
             }
             Console.WriteLine($"Categories: {catList}");
             Console.WriteLine();
+            Console.WriteLine(venue.Description);
+            Console.WriteLine();
+            Console.WriteLine("What would you like to do next?");
+            Console.WriteLine("1) View Spaces");
+            Console.WriteLine("2) Search for Reservation");
+            Console.WriteLine("R) Return to Previous Screen");
+            Console.ReadLine();
         }
 
         //venueDAO.GetCategoriesForVenues(venues[i]);
@@ -119,21 +134,6 @@ namespace Capstone
         //    IList<string> categiories = venueDAO.GetCategoriesForVenues(venue);
         //}
 
-
-
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         public void ReturnToPrevious()
         {
