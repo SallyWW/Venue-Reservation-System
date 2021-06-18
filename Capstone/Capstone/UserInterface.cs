@@ -98,15 +98,10 @@ namespace Capstone
         public void DisplayTheVenueDetails(Venue venue)
         {
             IList<string> categoryList = venueDAO.GetCategoriesForVenues(venue);
+            Console.WriteLine();
             Console.WriteLine(venue.Name);
             Console.WriteLine($"Location: {venue.CityName}, {venue.StateCode}");
 
-            // ["hello", "there"] WANT "hello, there"
-            // init some var str as ""
-            // for each category
-            //   if str is not empty ("hello") add comma
-            //   str = str + category
-            // done
             string catList = "";
             foreach (string category in categoryList)
             {
