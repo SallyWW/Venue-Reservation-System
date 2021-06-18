@@ -20,6 +20,9 @@ namespace Capstone.DAL
                     "JOIN category c ON c.id = cv.category_id " +
                     "WHERE v.id = @venueid " +
                     "ORDER BY v.name";
+        private const string SqlGetVenueSpaces = "SELECT s.id, s.name, s.is_accessible, s.open_from, s.open_to, s.daily_rate, s.max_occupancy " +
+            "FROM venue v JOIN space s ON v.id = s.venue_id " +
+            "WHERE v.id = @id";
 
 
         public VenueDAO(string connectionString)
@@ -87,6 +90,50 @@ namespace Capstone.DAL
                 Console.WriteLine("Problem getting venues: " + ex.Message);
             }
             return categories;
+        }
+
+        public IList<Space> GetSpacesForVenue(string venue_id)
+        {
+            IList<Space> spaces = new List<Space>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand command = new SqlCommand(SqlGetVenueSpaces, conn);
+
+                    command.Parameters.AddWithValue("@id", venue_id);
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Space space = new Space();
+                        space.Id = Convert.ToInt32(reader["id"]);
+                        space.Name = Convert.ToString(reader["name"]);
+                        space.WheelchairAccessible = Convert.ToBoolean(reader["is_accessible"]);
+                        space.OpenMonth = ConvertNullDate(reader,"open_from");
+                        space.CloseMonth = ConvertNullDate(reader,"open_to");
+                        space.DailyRate = Convert.ToDecimal(reader["daily_rate"]);
+                        space.MaxOccupancy = Convert.ToInt32(reader["max_occupancy"]);
+                        spaces.Add(space);
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Problem getting spaces: " + ex.Message);
+            }
+            return spaces;
+        }
+
+        private int ConvertNullDate(SqlDataReader reader, string columnName)
+        {
+            if (reader.IsDBNull(reader.GetOrdinal(columnName)))
+            {
+                return -1;
+            }
+            return Convert.ToInt32(reader[columnName]);
         }
     }
 }

@@ -34,13 +34,13 @@ namespace Capstone
 
         //private VenueDAO venuedao = new VenueDAO(connectionString);
 
-        private List<int> menuWalkBack = new List<int>();
+        //private List<int> menuWalkBack = new List<int>();
         public void Run()
         {
-            menuWalkBack = new List<int>();
-            menuWalkBack.Add(1);
-            bool mainMenu = true;
-            while (mainMenu)
+            //menuWalkBack = new List<int>();
+            //menuWalkBack.Add(1);
+            //bool mainMenu = true;
+            while (true)
             {
 
                 Console.WriteLine("What would you like to do?");
@@ -53,12 +53,13 @@ namespace Capstone
                 }
                 else if (userInput == "2")
                 {
-                    mainMenu = false;
+                    //mainMenu = false;
+                    return;
                 }
                 else
                 {
                     Console.WriteLine("Please Enter a Valid Choice");
-                    continue;
+                    //continue;
                 }
             }
 
@@ -66,9 +67,9 @@ namespace Capstone
         }
         public void ListVenues()
         {
-            menuWalkBack.Add(2);
-            bool listVenues = true;
-            while (listVenues)
+            //menuWalkBack.Add(2);
+            //bool listVenues = true;
+            while (true)
             {
 
                 IList<Venue> venues = venueDAO.GetAllVenues();
@@ -82,8 +83,9 @@ namespace Capstone
                 string userInput = Console.ReadLine().ToUpper();
                 if (userInput == "R")
                 {
-                    listVenues = false;
-                    ReturnToPrevious();
+                    //listVenues = false;
+                    //ReturnToPrevious();
+                    return;
                 }
                 int userInt = Convert.ToInt32(userInput);
                 if ((userInt > 0) && (userInt < 16))
@@ -97,29 +99,80 @@ namespace Capstone
         }
         public void DisplayTheVenueDetails(Venue venue)
         {
-            IList<string> categoryList = venueDAO.GetCategoriesForVenues(venue);
-            Console.WriteLine();
-            Console.WriteLine(venue.Name);
-            Console.WriteLine($"Location: {venue.CityName}, {venue.StateCode}");
-
-            string catList = "";
-            foreach (string category in categoryList)
+            while (true)
             {
-                if (catList.Length != 0)
+                IList<string> categoryList = venueDAO.GetCategoriesForVenues(venue);
+                Console.WriteLine();
+                Console.WriteLine(venue.Name);
+                Console.WriteLine($"Location: {venue.CityName}, {venue.StateCode}");
+
+                string catList = "";
+                foreach (string category in categoryList)
                 {
-                    catList += ", ";
+                    if (catList.Length != 0)
+                    {
+                        catList += ", ";
+                    }
+                    catList += category;
                 }
-                catList += category;
+                Console.WriteLine($"Categories: {catList}");
+                Console.WriteLine();
+                Console.WriteLine(venue.Description);
+                Console.WriteLine();
+                Console.WriteLine("What would you like to do next?");
+                Console.WriteLine("1) View Spaces");
+                Console.WriteLine("2) Search for Reservation");
+                Console.WriteLine("R) Return to Previous Screen");
+                string userInput = Console.ReadLine().ToUpper();
+
+                switch (userInput)
+                {
+                    case "1":
+                        ViewVenueSpaces(venue);
+                        break;
+                    //case "2":
+                    //    SearchForReservation(venue);
+                    //    break;
+                    case "R":
+                        return;
+                }
             }
-            Console.WriteLine($"Categories: {catList}");
-            Console.WriteLine();
-            Console.WriteLine(venue.Description);
-            Console.WriteLine();
-            Console.WriteLine("What would you like to do next?");
-            Console.WriteLine("1) View Spaces");
-            Console.WriteLine("2) Search for Reservation");
-            Console.WriteLine("R) Return to Previous Screen");
-            Console.ReadLine();
+        }
+
+        public void ViewVenueSpaces(Venue venue)
+        {
+            while (true)
+            {
+                IList<Space> spaces = venueDAO.GetSpacesForVenue(Convert.ToString(venue.Id));
+                Console.WriteLine(venue.Name);
+                Console.WriteLine();
+                Console.WriteLine($"     Name                               Open   Close   Daily Rate   Max. Occupancy");
+
+                Space userSpace;
+                for (int i = 0; i < spaces.Count; i++)
+                {
+                    Space space = spaces[i];
+                    string number = $"#{i + 1}".PadRight(5);
+                    string name = space.Name.PadRight(35);
+                    string open = Space.Month(space.OpenMonth).PadRight(7);
+                    string close = Space.Month(space.CloseMonth).PadRight(8);
+                    string rate = space.DailyRate.ToString("C").PadRight(13);
+                    string maxOccupancy = space.MaxOccupancy.ToString();
+                    Console.WriteLine(number + name + open + close + rate + maxOccupancy);
+                    
+                }
+                Console.WriteLine();
+                Console.WriteLine("What would you like to do next?");
+                Console.WriteLine("1) Reserve a Space");
+                Console.WriteLine("R) Return to Previous Screen");
+
+                string userInput = Console.ReadLine().ToUpper();
+
+                if (userInput == "R")
+                {
+                    return;
+                }
+            }
         }
 
         //venueDAO.GetCategoriesForVenues(venues[i]);
@@ -129,45 +182,45 @@ namespace Capstone
         //    IList<string> categiories = venueDAO.GetCategoriesForVenues(venue);
         //}
 
-        
-        public void ReturnToPrevious()
-        {
-            // remove last entry in list
-            int lastItem = menuWalkBack.Count - 1;
-            menuWalkBack.RemoveAt(lastItem);
 
-            //  go to last item in list
-            var lastIndex = menuWalkBack.Count - 1;
-            MenuSwitch(menuWalkBack[lastIndex]);
-        }
-        public void MenuSwitch(int menu)
-        {
-            // remove the current index we're using to go to previous
-            if (menuWalkBack.Count > 1)
-            {
-                int lastIndex = menuWalkBack.Count - 1;
-                menuWalkBack.RemoveAt(lastIndex);
+        //public void ReturnToPrevious()
+        //{
+        //    // remove last entry in list
+        //    int lastItem = menuWalkBack.Count - 1;
+        //    menuWalkBack.RemoveAt(lastItem);
 
-            }
-            switch (menu)
-            {
-                case 1:
-                    Run();
-                    break;
-                case 2:
-                    ListVenues();
-                    break;
-                //case 3:
-                //    ThirdMenu();
-                //    break;
-                ////case 4:
-                ////    FourthMenu();
-                ////    break;
-                default:
-                    Run();
-                    break;
+        //    //  go to last item in list
+        //    var lastIndex = menuWalkBack.Count - 1;
+        //    MenuSwitch(menuWalkBack[lastIndex]);
+        //}
+        //public void MenuSwitch(int menu)
+        //{
+        //    // remove the current index we're using to go to previous
+        //    if (menuWalkBack.Count > 1)
+        //    {
+        //        int lastIndex = menuWalkBack.Count - 1;
+        //        menuWalkBack.RemoveAt(lastIndex);
 
-            }
-        }
+        //    }
+        //    switch (menu)
+        //    {
+        //        case 1:
+        //            Run();
+        //            break;
+        //        case 2:
+        //            ListVenues();
+        //            break;
+        //        //case 3:
+        //        //    ThirdMenu();
+        //        //    break;
+        //        ////case 4:
+        //        ////    FourthMenu();
+        //        ////    break;
+        //        default:
+        //            Run();
+        //            break;
+
+        //    }
+        //}
     }
 }
