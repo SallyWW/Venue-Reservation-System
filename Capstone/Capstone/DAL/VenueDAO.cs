@@ -23,14 +23,20 @@ namespace Capstone.DAL
         private const string SqlGetVenueSpaces = "SELECT s.id, s.name, s.is_accessible, s.open_from, s.open_to, s.daily_rate, s.max_occupancy " +
             "FROM venue v JOIN space s ON v.id = s.venue_id " +
             "WHERE v.id = @id";
-        private const string SqlSelectAvailableSpaces = "SELECT TOP 5 s.id, s.name, s.is_accessible, s.daily_rate, s.max_occupancy " +
-            "FROM venue v JOIN space s ON v.id = s.venue_id JOIN reservation r ON r.space_id = s.id " +
-            "WHERE s.max_occupancy >= @userOccupancy " +
-            "AND s.open_from <= @startMonth " +
-            "AND s.open_to >= @endMonth " +
-            "AND r.start_date >= @startDate " +
-            "AND r.end_date <= @endDate";
+        private const string SqlSelectUnreservedSpaces = "SELECT TOP 5 s.id, s.name, s.daily_rate, s.is_accessible, s.max_occupancy " +
+            "FROM space s " +
+            "WHERE venue_id = @venue_id " +
+            "AND(s.open_from <= @userStartMonth OR s.open_from IS NULL) " +
+            "AND(s.open_to >= @userEndMonth OR s.open_to IS NULL) " +
+            "AND s.max_occupancy >= @userOccupancy " +
+            "AND s.id NOT IN " +
+            "(SELECT s.id FROM reservation r " +
+            "JOIN space s on r.space_id = s.id " +
+            "WHERE s.venue_id = @venue_id " +
+            "AND r.end_date >= @req_from_date " +
+            "AND r.start_date <= @req_to_date)";
 
+        //private const string SqlSelectOpenSpaces = 
 
         public VenueDAO(string connectionString)
         {
@@ -152,14 +158,16 @@ namespace Capstone.DAL
                 {
                     conn.Open();
 
-                    SqlCommand command = new SqlCommand(SqlGetVenueSpaces, conn);
+                    SqlCommand command = new SqlCommand(SqlSelectUnreservedSpaces, conn);
 
-                    command.Parameters.AddWithValue("@userOccupancy", occupancy);
+                    int userStartMonth = startDate.Month;
+                    int userEndMonth = startDate.AddDays(numberOfDays).Month;
 
-                    command.Parameters.AddWithValue("@startMonth", startDate);
-                    command.Parameters.AddWithValue("@endMonth", );
-                    command.Parameters.AddWithValue("@startDate", startDate);
-                    command.Parameters.AddWithValue("@endDate", );
+                    command.Parameters.AddWithValue("@venue_id", venue_id);
+                    //command.Parameters.AddWithValue("@startMonth", userStartMonth);
+                    //command.Parameters.AddWithValue("@endMonth", userEndMonth);
+                    command.Parameters.AddWithValue("@req_from_date", startDate);
+                    command.Parameters.AddWithValue("@req_to_date", startDate.AddDays(numberOfDays));
 
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
