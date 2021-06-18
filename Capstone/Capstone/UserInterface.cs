@@ -131,7 +131,7 @@ namespace Capstone
                         ViewVenueSpaces(venue);
                         break;
                     case "2":
-                        GetReservationDetails(Venue venue);
+                        GetReservationDetails(venue);
                         break;
                     case "R":
                         return;
@@ -181,21 +181,57 @@ namespace Capstone
             {
                 Console.WriteLine("When do you need the space? (MM/DD/YYYY)");
                 string userDate = Console.ReadLine();
-                Convert.ToDateTime(userDate);
+                DateTime date = Convert.ToDateTime(userDate);
 
                 Console.WriteLine("How many days will you need the space?");
                 string userDays = Console.ReadLine();
-                Convert.ToInt32(userDays);
+                int days = Convert.ToInt32(userDays);
 
                 Console.WriteLine("How many people will be in attendance?");
                 string userOccupancy = Console.ReadLine();
-                Convert.ToInt32(userOccupancy);
+                int occupancy = Convert.ToInt32(userOccupancy);
 
+
+                IList<Space> spaces = venueDAO.GetAllAvailableSpaces(venue.Id.ToString(), date, days, occupancy);
+                if (spaces.Count <=0)
+                {
+                    Console.WriteLine("No spaces available. Would you like to try a different search? (Y / N)");
+                    string userInput = Console.ReadLine().ToUpper();
+                    if (userInput == "Y")
+                    {
+                        continue;
+                    }
+                    else if (userInput == "N")
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid Input");
+                        return;
+                    }
+                }
+                
                 Console.WriteLine();
                 Console.WriteLine("The following spaces are available based on your needs:");
 
                 Console.WriteLine();
-                Console.WriteLine($"Space #   Name                Daily Rate   Max Occup.   Accessible?   Total Cost");
+                Console.WriteLine($"Space #   Name                               Daily Rate   Max Occup.   Accessible?   Total Cost");
+                for (int i = 0; i < spaces.Count; i++)
+                {
+                    Space space = spaces[i];
+                    string number = $"{space.Id}".PadRight(10);
+                    string name = space.Name.PadRight(35);
+                    string rate = space.DailyRate.ToString("C").PadRight(13);
+                    string maxOccupancy = space.MaxOccupancy.ToString().PadRight(13);
+                    string accessible = Space.Accessible(space.WheelchairAccessible).PadRight(14);
+                    string totalCost = space.TotalCost.ToString("C");
+                    //string open = Space.Month(space.OpenMonth).PadRight(7);
+                    //string close = Space.Month(space.CloseMonth).PadRight(8);
+                    Console.WriteLine(number + name + rate + maxOccupancy + accessible + totalCost);
+
+                }
+
             }
             return;
         }

@@ -54,5 +54,17 @@ namespace Capstone.Models
                 default: return "";
             }
         }
+        public static string Accessible(bool isAccessible)
+        {
+            if (isAccessible)
+            {
+                return "Yes";
+            }
+            else
+            {
+                return "No";
+            }
+                
+        }
     }
 }

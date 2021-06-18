@@ -149,7 +149,7 @@ namespace Capstone.DAL
             return Convert.ToInt32(reader[columnName]);
         }
 
-        public IList<Space> GetSpacesForVenue(string venue_id, DateTime startDate, int numberOfDays, int occupancy)
+        public IList<Space> GetAllAvailableSpaces(string venue_id, DateTime startDate, int numberOfDays, int occupancy)
         {
             IList<Space> spaces = new List<Space>();
             try
@@ -164,10 +164,11 @@ namespace Capstone.DAL
                     int userEndMonth = startDate.AddDays(numberOfDays).Month;
 
                     command.Parameters.AddWithValue("@venue_id", venue_id);
-                    //command.Parameters.AddWithValue("@startMonth", userStartMonth);
-                    //command.Parameters.AddWithValue("@endMonth", userEndMonth);
+                    command.Parameters.AddWithValue("@userStartMonth", userStartMonth);
+                    command.Parameters.AddWithValue("@userEndMonth", userEndMonth);
                     command.Parameters.AddWithValue("@req_from_date", startDate);
                     command.Parameters.AddWithValue("@req_to_date", startDate.AddDays(numberOfDays));
+                    command.Parameters.AddWithValue("@userOccupancy", occupancy);
 
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
@@ -175,11 +176,12 @@ namespace Capstone.DAL
                         Space space = new Space();
                         space.Id = Convert.ToInt32(reader["id"]);
                         space.Name = Convert.ToString(reader["name"]);
-                        space.WheelchairAccessible = Convert.ToBoolean(reader["is_accessible"]);
-                        space.OpenMonth = ConvertNullDate(reader, "open_from");
-                        space.CloseMonth = ConvertNullDate(reader, "open_to");
                         space.DailyRate = Convert.ToDecimal(reader["daily_rate"]);
+                        space.WheelchairAccessible = Convert.ToBoolean(reader["is_accessible"]);
                         space.MaxOccupancy = Convert.ToInt32(reader["max_occupancy"]);
+                        //space.OpenMonth = ConvertNullDate(reader, "open_from");
+                        //space.CloseMonth = ConvertNullDate(reader, "open_to");
+                        space.NumberOfDays = Convert.ToInt32(numberOfDays);
                         spaces.Add(space);
                     }
                 }
