@@ -130,9 +130,9 @@ namespace Capstone
                     case "1":
                         ViewVenueSpaces(venue);
                         break;
-                    //case "2":
-                    //    SearchForReservation(venue);
-                    //    break;
+                    case "2":
+                        GetReservationDetails(Venue venue);
+                        break;
                     case "R":
                         return;
                 }
@@ -173,6 +173,31 @@ namespace Capstone
                     return;
                 }
             }
+        }
+
+        public void GetReservationDetails (Venue venue)
+        {
+            while (true)
+            {
+                Console.WriteLine("When do you need the space? (MM/DD/YYYY)");
+                string userDate = Console.ReadLine();
+                Convert.ToDateTime(userDate);
+
+                Console.WriteLine("How many days will you need the space?");
+                string userDays = Console.ReadLine();
+                Convert.ToInt32(userDays);
+
+                Console.WriteLine("How many people will be in attendance?");
+                string userOccupancy = Console.ReadLine();
+                Convert.ToInt32(userOccupancy);
+
+                Console.WriteLine();
+                Console.WriteLine("The following spaces are available based on your needs:");
+
+                Console.WriteLine();
+                Console.WriteLine($"Space #   Name                Daily Rate   Max Occup.   Accessible?   Total Cost");
+            }
+            return;
         }
 
         //venueDAO.GetCategoriesForVenues(venues[i]);

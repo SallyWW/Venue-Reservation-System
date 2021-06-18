@@ -13,6 +13,15 @@ namespace Capstone.Models
         public int CloseMonth { get; set; }
         public decimal DailyRate { get; set; }
         public int MaxOccupancy { get; set; }
+        public int NumberOfDays { get; set; }
+
+        public decimal TotalCost
+        {
+            get
+            {
+                return DailyRate * NumberOfDays;
+            }
+        }
 
         public static string Month(int monthIndex)
         {
