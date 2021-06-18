@@ -71,29 +71,34 @@ namespace Capstone
             //bool listVenues = true;
             while (true)
             {
+                try
+                {
+                    IList<Venue> venues = venueDAO.GetAllVenues();
+                    Console.WriteLine("Which venue would you like to view?");
+                    Venue userVenue;
+                    for (int i = 0; i < venues.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}) {venues[i].Name}");
+                    }
+                    Console.WriteLine($"R) Return to Previous Screen");
+                    string userInput = Console.ReadLine().ToUpper();
+                    if (userInput == "R")
+                    {
+                        //listVenues = false;
+                        //ReturnToPrevious();
+                        return;
+                    }
+                    int userInt = Convert.ToInt32(userInput);
+                    if ((userInt > 0) && (userInt < 16))
+                    {
+                        userVenue = venues[userInt - 1];
 
-                IList<Venue> venues = venueDAO.GetAllVenues();
-                Console.WriteLine("Which venue would you like to view?");
-                Venue userVenue;
-                for (int i = 0; i < venues.Count; i++)
-                {
-                    Console.WriteLine($"{i + 1}) {venues[i].Name}");
+                        DisplayTheVenueDetails(userVenue);
+                    }
                 }
-                Console.WriteLine($"R) Return to Previous Screen");
-                string userInput = Console.ReadLine().ToUpper();
-                if (userInput == "R")
+                catch(FormatException ex)
                 {
-                    //listVenues = false;
-                    //ReturnToPrevious();
-                    return;
-                }
-                int userInt = Convert.ToInt32(userInput);
-                if ((userInt > 0) && (userInt < 16))
-                {
-                    userVenue = venues[userInt - 1];
-
-                    DisplayTheVenueDetails(userVenue);
-                    Console.ReadLine();
+                    Console.WriteLine("Invalid input.");
                 }
             }
         }
