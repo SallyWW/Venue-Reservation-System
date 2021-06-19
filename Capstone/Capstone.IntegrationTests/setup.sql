@@ -1,5 +1,5 @@
 ﻿-- Put steps here to set up your database in a default good state for testing
-BEGIN TRANSACTION
+
 DELETE FROM category_venue;
 DELETE FROM category;
 DELETE FROM reservation;

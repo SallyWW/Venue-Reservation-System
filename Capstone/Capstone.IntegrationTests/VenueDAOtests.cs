@@ -23,13 +23,18 @@ namespace Capstone.IntegrationTests
             Assert.AreEqual(1, results.Count);
         }
         [TestMethod]
-        public void TestMethod2()
+        public void VenueShouldHave1CategoryCalledPartyPlanet()
         {
             // Arrange
+            VenueDAO dao = new VenueDAO(ConnectionString);
+            Venue venue = new Venue();
+            venue.Id = 1;
 
             // Act
-
+            IList<string> result = dao.GetCategoriesForVenues(venue);
             // Assert
+            Assert.AreEqual(result[0], "Party Planet");
+            Assert.AreEqual(result.Count, 1);
         }
         [TestMethod]
         public void GetSpacesForVenueReturnsSpaces()
