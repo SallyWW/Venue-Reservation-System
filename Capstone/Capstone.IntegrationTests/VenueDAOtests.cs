@@ -12,13 +12,16 @@ namespace Capstone.IntegrationTests
     public class VenueDAOtests : IntegrationTestBase
     {
         [TestMethod]
-        public void TestMethod1()
+        public void GetVenuesShouldReturnOneRow()
         {
             // Arrange
-
+            VenueDAO dao = new VenueDAO(ConnectionString);
+            
             // Act
-
+            IList<Venue> results = dao.GetAllVenues();
             // Assert
+            Assert.IsTrue(results.Count > 0);
+            Assert.AreEqual(1, results.Count);
         }
         [TestMethod]
         public void TestMethod2()
