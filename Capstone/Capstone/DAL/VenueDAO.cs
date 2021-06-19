@@ -16,10 +16,10 @@ namespace Capstone.DAL
             "FROM venue v JOIN city c ON v.city_id = c.id JOIN state s ON c.state_abbreviation = s.abbreviation " +
             "ORDER BY v.name";
         private const string SqlSelectGetCategories = "SELECT c.name FROM venue v " +
-                    "JOIN category_venue cv ON v.id = cv.venue_id " +
-                    "JOIN category c ON c.id = cv.category_id " +
-                    "WHERE v.id = @venueid " +
-                    "ORDER BY v.name";
+            "JOIN category_venue cv ON v.id = cv.venue_id " +
+            "JOIN category c ON c.id = cv.category_id " +
+            "WHERE v.id = @venueid " +
+            "ORDER BY v.name";
         private const string SqlGetVenueSpaces = "SELECT s.id, s.name, s.is_accessible, s.open_from, s.open_to, s.daily_rate, s.max_occupancy " +
             "FROM venue v JOIN space s ON v.id = s.venue_id " +
             "WHERE v.id = @id";
