@@ -35,6 +35,9 @@ namespace Capstone.DAL
             "WHERE s.venue_id = @venue_id " +
             "AND r.end_date >= @req_from_date " +
             "AND r.start_date <= @req_to_date)";
+        private const string SqlCreateReservation = "INSERT INTO reservation (space_id, reserved_for, start_date, end_date, number_of_attendees) " +
+            "VALUES(@spaceId, @reservationName, @startDate, @endDate, @userOccupancy); " +
+            "SELECT @@IDENTITY AS 'id';";
 
         //private const string SqlSelectOpenSpaces = 
 
@@ -192,6 +195,44 @@ namespace Capstone.DAL
                 Console.WriteLine("Problem returning available spaces:" + ex.Message);
             }
             return spaces;
+        }
+
+        public Reservation CreateAReservation (string reservationName, DateTime startDate, DateTime endDate, Space space, int occupancy)
+        {
+            Reservation reservation = new Reservation();
+            reservation.ReserveName = reservationName;
+            reservation.StartDate = startDate;
+            reservation.EndDate = endDate;
+            reservation.NumberOfAttendees = occupancy;
+
+            Random rnd = new Random();
+            int randomNumber = rnd.Next(1000000, 10000000);
+            reservation.ConfirmationNumber = randomNumber;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand command = new SqlCommand(SqlCreateReservation, conn);
+
+                    command.Parameters.AddWithValue("@spaceId", space.Id);
+                    command.Parameters.AddWithValue("@reservationName", reservationName);
+                    command.Parameters.AddWithValue("@startDate", startDate);
+                    command.Parameters.AddWithValue("@endDate", endDate);
+                    command.Parameters.AddWithValue("@userOccupancy", occupancy);
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    reader.Read();
+                    reservation.Id = Convert.ToInt32(reader["id"]);
+                }
+            }
+            catch(SqlException ex)
+            {
+                Console.WriteLine("Problem creating reservation: " + ex.Message);
+            }
+            return reservation;
         }
     }
 }

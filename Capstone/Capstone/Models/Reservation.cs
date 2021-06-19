@@ -11,5 +11,6 @@ namespace Capstone.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string ReserveName { get; set; }
+        public int ConfirmationNumber { get; set; }
     }
 }

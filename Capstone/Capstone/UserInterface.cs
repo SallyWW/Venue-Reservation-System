@@ -94,6 +94,7 @@ namespace Capstone
                         userVenue = venues[userInt - 1];
 
                         DisplayTheVenueDetails(userVenue);
+                        return;
                     }
                 }
                 catch(FormatException ex)
@@ -136,10 +137,19 @@ namespace Capstone
                         ViewVenueSpaces(venue);
                         break;
                     case "2":
-                        GetReservationDetails(venue);
+                        bool success = GetReservationDetails(venue);
+                        if (success)
+                        {
+                            return;
+                        }
                         break;
                     case "R":
                         return;
+                    default:
+                        Console.WriteLine();
+                        Console.WriteLine("Invalid input.");
+                        break;
+
                 }
             }
         }
@@ -173,14 +183,18 @@ namespace Capstone
 
                 string userInput = Console.ReadLine().ToUpper();
 
-                if (userInput == "R")
+                switch (userInput)
                 {
-                    return;
+                    case "1":
+                        GetReservationDetails(venue);
+                        break;
+                    case "R":
+                        return;
                 }
             }
         }
 
-        public void GetReservationDetails (Venue venue)
+        public bool GetReservationDetails (Venue venue)
         {
             while (true)
             {
@@ -208,12 +222,12 @@ namespace Capstone
                     }
                     else if (userInput == "N")
                     {
-                        return;
+                        return true;
                     }
                     else
                     {
                         Console.WriteLine("Invalid Input");
-                        return;
+                        return true;
                     }
                 }
                 
@@ -231,62 +245,49 @@ namespace Capstone
                     string maxOccupancy = space.MaxOccupancy.ToString().PadRight(13);
                     string accessible = Space.Accessible(space.WheelchairAccessible).PadRight(14);
                     string totalCost = space.TotalCost.ToString("C");
-                    //string open = Space.Month(space.OpenMonth).PadRight(7);
-                    //string close = Space.Month(space.CloseMonth).PadRight(8);
                     Console.WriteLine(number + name + rate + maxOccupancy + accessible + totalCost);
+                }
+                Console.WriteLine();
 
+                Console.WriteLine("Which space would you like to reserve (enter 0 to cancel)?");
+                int spaceNumberToReserve = Convert.ToInt32(Console.ReadLine());
+
+                Space spaceToReserve = new Space();
+                foreach(Space space in spaces)
+                {
+                    if (space.Id == spaceNumberToReserve)
+                    {
+                        spaceToReserve = space;
+                        break;
+                    }
                 }
 
+                Console.WriteLine("Who is this reservation for?");
+                string reservationName = Console.ReadLine();
+                Console.WriteLine();
+
+                Reservation reservation = venueDAO.CreateAReservation(reservationName, date, date.AddDays(days), spaceToReserve, occupancy);
+
+                Console.WriteLine("Thanks for submitting your reservation! The details for your event are listed below:");
+                Console.WriteLine();
+
+                Console.WriteLine($"Confirmation #: {reservation.ConfirmationNumber}");
+                Console.WriteLine($"Venue: {venue.Name}");
+                Console.WriteLine($"Space: {spaceToReserve.Name}");
+                Console.WriteLine($"Reserved for: {reservation.ReserveName}");
+                Console.WriteLine($"Attendees: {reservation.NumberOfAttendees}");
+                Console.WriteLine($"Arrival Date: {reservation.StartDate}");
+                Console.WriteLine($"Depart Date: {reservation.EndDate.Date}");
+                Console.WriteLine($"Total Cost: {spaceToReserve.TotalCost:C}");
+
+                Console.WriteLine();
+                Console.WriteLine("Please press any key to return to the main menu.");
+                Console.ReadKey();
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+                return false;
             }
-            return;
         }
-
-        //venueDAO.GetCategoriesForVenues(venues[i]);
-
-        //public void CategoriesToWriteLine(Venue venue)
-        //{
-        //    IList<string> categiories = venueDAO.GetCategoriesForVenues(venue);
-        //}
-
-
-        //public void ReturnToPrevious()
-        //{
-        //    // remove last entry in list
-        //    int lastItem = menuWalkBack.Count - 1;
-        //    menuWalkBack.RemoveAt(lastItem);
-
-        //    //  go to last item in list
-        //    var lastIndex = menuWalkBack.Count - 1;
-        //    MenuSwitch(menuWalkBack[lastIndex]);
-        //}
-        //public void MenuSwitch(int menu)
-        //{
-        //    // remove the current index we're using to go to previous
-        //    if (menuWalkBack.Count > 1)
-        //    {
-        //        int lastIndex = menuWalkBack.Count - 1;
-        //        menuWalkBack.RemoveAt(lastIndex);
-
-        //    }
-        //    switch (menu)
-        //    {
-        //        case 1:
-        //            Run();
-        //            break;
-        //        case 2:
-        //            ListVenues();
-        //            break;
-        //        //case 3:
-        //        //    ThirdMenu();
-        //        //    break;
-        //        ////case 4:
-        //        ////    FourthMenu();
-        //        ////    break;
-        //        default:
-        //            Run();
-        //            break;
-
-        //    }
-        //}
     }
 }
