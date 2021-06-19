@@ -210,7 +210,6 @@ namespace Capstone
                 string userOccupancy = Console.ReadLine();
                 int occupancy = Convert.ToInt32(userOccupancy);
 
-
                 IList<Space> spaces = venueDAO.GetAllAvailableSpaces(venue.Id.ToString(), date, days, occupancy);
                 if (spaces.Count <=0)
                 {

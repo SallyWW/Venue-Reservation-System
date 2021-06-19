@@ -182,8 +182,6 @@ namespace Capstone.DAL
                         space.DailyRate = Convert.ToDecimal(reader["daily_rate"]);
                         space.WheelchairAccessible = Convert.ToBoolean(reader["is_accessible"]);
                         space.MaxOccupancy = Convert.ToInt32(reader["max_occupancy"]);
-                        //space.OpenMonth = ConvertNullDate(reader, "open_from");
-                        //space.CloseMonth = ConvertNullDate(reader, "open_to");
                         space.NumberOfDays = Convert.ToInt32(numberOfDays);
                         spaces.Add(space);
                     }
