@@ -229,25 +229,10 @@ namespace Capstone
                         return true;
                     }
                 }
-                
-                Console.WriteLine();
-                Console.WriteLine("The following spaces are available based on your needs:");
+
+                ListTheAvailableSpaces(spaces);
 
                 Console.WriteLine();
-                Console.WriteLine($"Space #   Name                               Daily Rate   Max Occup.   Accessible?   Total Cost");
-                for (int i = 0; i < spaces.Count; i++)
-                {
-                    Space space = spaces[i];
-                    string number = $"{space.Id}".PadRight(10);
-                    string name = space.Name.PadRight(35);
-                    string rate = space.DailyRate.ToString("C").PadRight(13);
-                    string maxOccupancy = space.MaxOccupancy.ToString().PadRight(13);
-                    string accessible = Space.Accessible(space.WheelchairAccessible).PadRight(14);
-                    string totalCost = space.TotalCost.ToString("C");
-                    Console.WriteLine(number + name + rate + maxOccupancy + accessible + totalCost);
-                }
-                Console.WriteLine();
-
                 Console.WriteLine("Which space would you like to reserve (enter 0 to cancel)?");
                 int spaceNumberToReserve = Convert.ToInt32(Console.ReadLine());
 
@@ -267,26 +252,53 @@ namespace Capstone
 
                 Reservation reservation = venueDAO.CreateAReservation(reservationName, date, date.AddDays(days), spaceToReserve, occupancy);
 
-                Console.WriteLine("Thanks for submitting your reservation! The details for your event are listed below:");
-                Console.WriteLine();
+                PrintReservationDetails(reservation, spaceToReserve, venue);
 
-                Console.WriteLine($"Confirmation #: {reservation.ConfirmationNumber}");
-                Console.WriteLine($"Venue: {venue.Name}");
-                Console.WriteLine($"Space: {spaceToReserve.Name}");
-                Console.WriteLine($"Reserved for: {reservation.ReserveName}");
-                Console.WriteLine($"Attendees: {reservation.NumberOfAttendees}");
-                Console.WriteLine($"Arrival Date: {reservation.StartDate}");
-                Console.WriteLine($"Depart Date: {reservation.EndDate.Date}");
-                Console.WriteLine($"Total Cost: {spaceToReserve.TotalCost:C}");
-
-                Console.WriteLine();
-                Console.WriteLine("Please press any key to return to the main menu.");
-                Console.ReadKey();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
                 return false;
             }
+
+        }
+        public void ListTheAvailableSpaces(IList<Space> spaces)
+        {
+            Console.WriteLine();
+            Console.WriteLine("The following spaces are available based on your needs:");
+
+            Console.WriteLine();
+            Console.WriteLine($"Space #   Name                               Daily Rate   Max Occup.   Accessible?   Total Cost");
+            for (int i = 0; i < spaces.Count; i++)
+            {
+                Space space = spaces[i];
+                string number = $"{space.Id}".PadRight(10);
+                string name = space.Name.PadRight(35);
+                string rate = space.DailyRate.ToString("C").PadRight(13);
+                string maxOccupancy = space.MaxOccupancy.ToString().PadRight(13);
+                string accessible = Space.Accessible(space.WheelchairAccessible).PadRight(14);
+                string totalCost = space.TotalCost.ToString("C");
+                Console.WriteLine(number + name + rate + maxOccupancy + accessible + totalCost);
+            }
+            Console.WriteLine();
+        }
+        public void PrintReservationDetails(Reservation reservation, Space spaceToReserve, Venue venue)
+        {
+            Console.WriteLine("Thanks for submitting your reservation! The details for your event are listed below:");
+            Console.WriteLine();
+
+            Console.WriteLine($"Confirmation #: {reservation.ConfirmationNumber}");
+            Console.WriteLine($"Venue: {venue.Name}");
+            Console.WriteLine($"Space: {spaceToReserve.Name}");
+            Console.WriteLine($"Reserved for: {reservation.ReserveName}");
+            Console.WriteLine($"Attendees: {reservation.NumberOfAttendees}");
+            Console.WriteLine($"Arrival Date: {reservation.StartDate}");
+            Console.WriteLine($"Depart Date: {reservation.EndDate.Date}");
+            Console.WriteLine($"Total Cost: {spaceToReserve.TotalCost:C}");
+
+            Console.WriteLine();
+            Console.WriteLine("Please press any key to return to the main menu.");
+            Console.ReadKey();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+
         }
     }
 }
